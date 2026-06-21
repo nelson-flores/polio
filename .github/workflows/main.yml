@@ -1,0 +1,44 @@
+name: Deploy Xcounter(Production)
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  APP_PATH: /var/www/public_html/polio.nave.co.mz
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Remove git files
+        run: rm -rf .git .github
+
+      - name: Deploy via rsync (no git)
+        run: |
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" \
+          rsync -avz \
+          --no-group --no-perms \
+          --exclude=".env" \
+          --exclude="vendor" \
+          --exclude="storage/logs/*" \
+          --exclude="storage/app/public" \
+          -e "ssh -p ${{ secrets.VPS_PORT }}  -o StrictHostKeyChecking=no" \
+          ./ \
+          ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:${{ env.APP_PATH }}
+
+      - name: Run Laravel commands on server (including composer)
+        run: |
+          sshpass -p "${{ secrets.VPS_PASSWORD }}" \
+          ssh -p ${{ secrets.VPS_PORT }} -o StrictHostKeyChecking=no \
+          ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} "bash -s" << 'ENDSSH'
+          bash ${{ env.APP_PATH }}/ci-scripts/main-script.sh ${{ env.APP_PATH }}
+          ENDSSH

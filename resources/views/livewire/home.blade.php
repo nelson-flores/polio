@@ -4,11 +4,28 @@
         <div class="col-lg-8 col-xl-9 m-auto">
             <!-- Stats -->
             <div class="row">
+                <div class="col-12">
+
+                    <button type="button" wire:click='see_totals()' class="btn btn-success my-2"
+                        wire:loading.attr="disabled" wire:target="see_totals">
+
+
+                        <span wire:loading.remove wire:target="ee_totals">
+                            <i class="fa fa-chart-bar mx-1"></i>Dados Agrupados
+                        </span>
+
+                        <span wire:loading wire:target="run">
+                            <span class="spinner-border spinner-border-sm me-2"></span>
+                            Aguarde...
+                        </span>
+                    </button>
+                </div>
                 <div class="col-md-12">
 
                     <div class="block">
                         <div class="block-content bg-black-10">
-                            <h3 class="font-size-sm text-muted font-weight-bold text-uppercase mb-0">Novo Contador
+                            <h3 class="font-size-sm text-muted font-weight-bold text-uppercase mb-0">{{
+                                $this->edit_id?"Editar contador: ".$this->name:"Novo Contador" }}
                             </h3>
                         </div>
                         <div class="block-content">
@@ -21,9 +38,25 @@
                                     <label for="" class="form-label">Valor Inicial</label>
                                     <input type="text" class="form-control" wire:model='count' value="0" />
                                 </div>
+                                <div class="form-group col-md-12">
+                                    <label for="" class="form-label">Etiqueta</label>
+                                    <input type="text" class="form-control" wire:model='tag' value="" />
+                                </div>
                                 <div class="form-group col-12">
-                                    <button type="submit" class="btn btn-info"><i
-                                            class="fa fa-save mx-1"></i>Adicionar</button>
+                                    <button type="submit" class="btn btn-info" wire:loading.attr="disabled"
+                                        wire:target="save">
+
+
+                                        <span wire:loading.remove wire:target="save">
+                                            <i class="fa fa-save mx-1"></i> Guardar
+                                        </span>
+
+                                        <span wire:loading wire:target="save">
+                                            <span class="spinner-border spinner-border-sm me-2"></span>
+                                            Aguarde...
+                                        </span>
+
+                                    </button>
                                 </div>
                             </form>
                         </div>
@@ -51,6 +84,9 @@
                                     <th>
                                         Valor
                                     </th>
+                                    <th>
+                                        Tag
+                                    </th>
                                     <th class="text-center">
                                         Accoes
                                     </th>
@@ -71,6 +107,9 @@
                                     </td>
                                     <td>
                                         <h4>{{$counter->value}}</h4>
+                                    </td>
+                                    <td>
+                                        {{$counter->tag}}
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
@@ -104,8 +143,28 @@
 
                                             </button>
 
-                                            <button class="btn btn-danger" wire:click="delete({{$counter->id}})">
-                                                <i class="fa fa-trash"></i>
+                                            <button class="btn btn-dark" wire:click="edit({{$counter->id}})"
+                                                wire:loading.attr="disabled" wire:target="edit">
+
+
+                                                <span wire:loading.remove wire:target="edit"> <i class="fa fa-edit"></i>
+
+                                                </span>
+
+                                                <span wire:loading wire:target="edit">
+                                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                                </span>
+                                            </button>
+                                            <button class="btn btn-danger" wire:click="delete({{$counter->id}})"
+                                                wire:loading.attr="disabled" wire:target="edit">
+                                                <span wire:loading.remove wire:target="delete">
+                                                    <i class="fa fa-trash"></i>
+                                                </span>
+
+                                                <span wire:loading wire:target="delete">
+                                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                                </span>
+
                                             </button>
                                         </div>
                                     </td>
@@ -117,6 +176,7 @@
                                 @endforeach
                             </tbody>
                         </table>
+                        {{ $this->counters->links('livewire::bootstrap') }}
                     </div>
                 </div>
             </div>
@@ -133,11 +193,114 @@
 
 
 
-    <div class="modal" tabindex="-1" role="dialog" wire:ignore.self>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="modal" tabindex="-1" id='modal_edit' role="dialog" wire:ignore.self>
         <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
             <div class="modal-content">
                 <div class="modal-header">
+                    <h5 class="modal-title">{{ "Editar: ".$this->name }}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+
+                    <form action="#" class="row" wire:submit.prevent='save'>
+                        <div class="form-group col-md-6">
+                            <label for="" class="form-label">Nome</label>
+                            <input type="text" class="form-control" wire:model='name' />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="" class="form-label">Valor Inicial</label>
+                            <input type="text" class="form-control" wire:model='count' value="0" />
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="" class="form-label">Etiqueta</label>
+                            <input type="text" class="form-control" wire:model='tag' value="" />
+                        </div>
+                        <div class="form-group col-12">
+                            <button type="submit" class="btn btn-info" wire:loading.attr="disabled" wire:target="save">
+
+
+                                <span wire:loading.remove wire:target="save">
+                                    <i class="fa fa-save mx-1"></i> Guardar
+                                </span>
+
+                                <span wire:loading wire:target="save">
+                                    <span class="spinner-border spinner-border-sm me-2"></span>
+                                    Aguarde...
+                                </span>
+
+                            </button>
+                        </div>
+                    </form>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal" tabindex="-1" id='total' role="dialog" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Valores Agrupados</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <ul>
+
+                        @php
+
+                        $global_total=0;
+                        @endphp
+                        @foreach ($this->totals??[] as $total)
+                        @php
+                        $global_total+= $total->total
+                        @endphp
+                        <li>{{ $total->tag }} : <strong>{{$total->total}}</strong> </li>
+
+
+                        @endforeach
+
+                    </ul>
+
+                    <hr>
+                    <h3>TOTAL: {{$global_total}}</h3>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal" tabindex="-1" id='aumentar' role="dialog" wire:ignore.self>
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+
                     <h5 class="modal-title">{{ ($this->mode =='plus'?"Aumentar":"Reduzir").": ".$this->xname }}</h5>
+
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -194,7 +357,7 @@ function plus() {
 
     number.val(value + 1);
     Livewire.first().set('xcount', (value + 1));
-}
+};
 
 function less() {
     var value = parseInt(number.val());
@@ -209,13 +372,12 @@ function less() {
 
     number.val(value);
     Livewire.first().set('xcount', (value));
-}
+};
 
     </script>
 
 
     @endsection
-    s
 
 
 

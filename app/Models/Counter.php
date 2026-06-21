@@ -34,7 +34,8 @@ class Counter extends Model
 	protected $fillable = [
 		'user_id',
 		'name',
-		'value'
+		'value',
+		'tag'
 	];
 
 	public function user()
