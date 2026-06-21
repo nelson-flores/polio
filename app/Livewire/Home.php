@@ -86,7 +86,6 @@ class Home extends Component
     {
         $this->totals = $dados = Counter::select('tag', DB::raw('SUM(value) as total'))
             ->groupBy('tag')
-            ->latest()
             ->get();
 
 
