@@ -22,7 +22,7 @@ jobs:
       - name: Remove git files
         run: rm -rf .git .github
 
-      - name: Deploy via rsync (no git)
+      - name: Deploy via rsync
         run: |
           sshpass -p "${{ secrets.VPS_PASSWORD }}" \
           rsync -avz \
