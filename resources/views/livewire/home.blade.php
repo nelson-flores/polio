@@ -84,9 +84,6 @@
                                     <th>
                                         Valor
                                     </th>
-                                    <th>
-                                        Tag
-                                    </th>
                                     <th class="text-center">
                                         Accoes
                                     </th>
@@ -103,13 +100,10 @@
                                     </td>
                                     <td>
                                         <strong class='d-block'>{{$counter->name}}</strong>
-                                        <small> {{$counter->created_at->format('d/m/Y H:i')}}</small>
+                                        <small>  {{$counter->tag}}  {{$counter->created_at->format('d/m/Y H:i')}}</small>
                                     </td>
                                     <td>
                                         <h4>{{$counter->value}}</h4>
-                                    </td>
-                                    <td>
-                                        {{$counter->tag}}
                                     </td>
                                     <td class="text-center">
                                         <div class="btn-group">
