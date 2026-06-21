@@ -10,11 +10,11 @@
                         wire:loading.attr="disabled" wire:target="see_totals">
 
 
-                        <span wire:loading.remove wire:target="ee_totals">
+                        <span wire:loading.remove wire:target="see_totals">
                             <i class="fa fa-chart-bar mx-1"></i>Dados Agrupados
                         </span>
 
-                        <span wire:loading wire:target="run">
+                        <span wire:loading wire:target="see_totals">
                             <span class="spinner-border spinner-border-sm me-2"></span>
                             Aguarde...
                         </span>
@@ -183,23 +183,6 @@
             <!-- END Projects -->
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
